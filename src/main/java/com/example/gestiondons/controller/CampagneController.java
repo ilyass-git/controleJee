@@ -27,6 +27,12 @@ public class CampagneController {
         return ResponseEntity.ok(campagneService.getCampagnesActives());
     }
 
+    @GetMapping("/campagnes/{id}/dons")
+    @Operation(summary = "Récupérer tous les dons d'une campagne")
+    public ResponseEntity<List<DonDTO>> getDonsByCampagne(@PathVariable Long id) {
+        return ResponseEntity.ok(donService.getDonsByCampagne(id));
+    }
+
     @PostMapping("/campagnes/{id}/dons")
     @Operation(summary = "Enregistrer un don pour une campagne")
     public ResponseEntity<DonDTO> enregistrerDon(

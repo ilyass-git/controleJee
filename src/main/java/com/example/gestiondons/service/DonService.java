@@ -9,11 +9,24 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class DonService {
     private final DonationRepository donationRepository;
     private final CampagneRepository campagneRepository;
+
+    @Transactional(readOnly = true)
+    public List<DonDTO> getDonsByCampagne(Long campagneId) {
+        Campagne campagne = campagneRepository.findById(campagneId)
+                .orElseThrow(() -> new RuntimeException("Campagne non trouvée"));
+        
+        return campagne.getDonations().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
 
     @Transactional
     public DonDTO enregistrerDon(Long campagneId, DonDTO donDTO) {
